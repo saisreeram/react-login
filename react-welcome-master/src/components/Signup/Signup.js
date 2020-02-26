@@ -21,7 +21,9 @@ class Signup extends Component {
      redirectToReferrer: false,
      phone_error:null,
      aadhar_error:null,
-     username_error:null
+     username_error:null,
+     password_error:null,
+     password1:'',
     };
 
     this.signup = this.signup.bind(this);
@@ -45,7 +47,11 @@ class Signup extends Component {
         
         this.setState({username_error:'invalid User Name'})
 
-      } 
+      }
+      
+   else{
+    this.setState({username_error:null})
+   } 
         
       
      });
@@ -64,6 +70,7 @@ class Signup extends Component {
     
      this.setState({phone_error:'invalid phone number'})
    }
+
    else{
     this.setState({phone_error:null})
    }
@@ -78,7 +85,7 @@ class Signup extends Component {
    if (y.length!=12)
    {
     
-     this.setState({aadhar_error:'invalid aadhar number'})
+     this.setState({aadhar_error:'invalid password'})
    }
    else{
     this.setState({aadhar_error:null})
@@ -88,12 +95,30 @@ class Signup extends Component {
 
 
 
-  }
+   if(e.target.name==='password1' )
+   {
+   var x = e.target.value;
+   if (x!=this.state.password)
+   
+   
+   {
+    
+     this.setState({password_error:'passwords didnt match'})
+   }
+   else{
+    this.setState({password_error:null})
+   }
+   }
 
 
+  
+
+
+
+  }  
   render() {
     if (this.state.redirectToReferrer){
-      return(<Redirect to ={'/home'}/>)
+      return(<Redirect to ={'/login'}/>)
     }
     if (this.state.redirectToReferrer || sessionStorage.getItem('userData')) {
       return (<Redirect to={'/home'}/>)
@@ -115,7 +140,14 @@ class Signup extends Component {
 
         <input type="text" name="username" placeholder="Username" onChange={this.onChange}/>
         <label>Password</label>
+
         <input type="password" name="password"  placeholder="Password" onChange={this.onChange}/>
+
+        <label>Re-EnterPassword</label>
+        {this.state.password_error?<Alert color="danger">{this.state.password_error}</Alert> : null}
+
+        <input type="password" name="password1"  placeholder="Password" onChange={this.onChange}/>
+
         <label>phone_no</label>
         {this.state.phone_error?<Alert color="danger">{this.state.phone_error}</Alert> : null}
         <input type="number" name="phone_no"  placeholder="phone_id" onChange={this.onChange}/>
