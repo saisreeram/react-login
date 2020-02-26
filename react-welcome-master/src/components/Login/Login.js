@@ -2,7 +2,8 @@ import React, {Component} from 'react';
 import {Redirect} from 'react-router-dom';
 import {PostData} from '../../services/PostData';
 import './Login.css';
-
+import { Alert
+} from 'reactstrap'
 class Login extends Component {
 
   constructor(){
@@ -11,7 +12,9 @@ class Login extends Component {
     this.state = {
      user_name: '',
      password: '',
-     redirectToReferrer: false
+     redirectToReferrer: false,
+     
+     msg:null
     };
 
     this.login = this.login.bind(this);
@@ -19,16 +22,24 @@ class Login extends Component {
 
   }
 
+
+
   
 
-  login() {
+  
+
+  
+        login() {
     if(this.state.user_name && this.state.password){
       PostData('login',this.state).then((result) => {
        let responseJson = result;
        console.log(result)
-       if(responseJson.status){         
+       if(responseJson.status){        
          sessionStorage.setItem('userData',JSON.stringify(responseJson));
          this.setState({redirectToReferrer: true});
+       }
+       else {
+         this.setState({msg:'Invalid Username or Password'})
        }
        
       });
@@ -54,9 +65,13 @@ class Login extends Component {
     }
 
      return (
+       
       <div className="row" id="Body">
         <div className="medium-5 columns left">
         <h4>Login</h4>
+        {this.state.msg?<Alert color="danger">{this.state.msg}</Alert> : null}
+
+
         <label>Username</label>
         <input type="text" name="user_name" placeholder="Username" onChange={this.onChange}/>
         <label>Password</label>

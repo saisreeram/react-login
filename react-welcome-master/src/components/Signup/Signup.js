@@ -2,6 +2,8 @@ import React, {Component} from 'react';
 import {PostData} from '../../services/PostData';
 import {Redirect} from 'react-router-dom';
 import './Signup.css';
+import { Alert
+} from 'reactstrap';
 
 class Signup extends Component {
 
@@ -16,7 +18,9 @@ class Signup extends Component {
      phone_no:'',
      aadhar_no:'',
      date_of_birth:'',
-     redirectToReferrer: false
+     redirectToReferrer: false,
+     phone_error:null,
+     aadhar_error:null
     };
 
     this.signup = this.signup.bind(this);
@@ -41,6 +45,40 @@ class Signup extends Component {
 
  onChange(e){
    this.setState({[e.target.name]:e.target.value});
+   if(e.target.name==='phone_no')
+   {
+   var x = e.target.value;
+   var y = x.toString();
+   
+   if (y.length!=10)
+   {
+    console.log(y.length)
+     this.setState({phone_error:'invalid phone number'})
+   }
+   else{
+    this.setState({phone_error:null})
+   }
+   }
+
+
+   if(e.target.name==='aadhar_no')
+   {
+   var x = e.target.value;
+   var y = x.toString();
+   
+   if (y.length!=12)
+   {
+    console.log(y.length)
+     this.setState({aadhar_error:'invalid aadhar number'})
+   }
+   else{
+    this.setState({aadhar_error:null})
+   }
+   }
+
+
+
+
   }
 
 
@@ -68,8 +106,11 @@ class Signup extends Component {
         <label>Password</label>
         <input type="password" name="password"  placeholder="Password" onChange={this.onChange}/>
         <label>phone_no</label>
+        {this.state.phone_error?<Alert color="danger">{this.state.phone_error}</Alert> : null}
         <input type="number" name="phone_no"  placeholder="phone_id" onChange={this.onChange}/>
         <label>aadhar_no</label>
+        {this.state.aadhar_error?<Alert color="danger">{this.state.aadhar_error}</Alert> : null}
+
         <input type="number" name="aadhar_no"  placeholder="aadhar_no" onChange={this.onChange}/>
         <label>date_of_birth</label>
         <input type="text" name="date_of_birth"  placeholder="date_of_birth" onChange={this.onChange}/>
