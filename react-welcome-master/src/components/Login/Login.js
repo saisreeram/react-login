@@ -14,7 +14,8 @@ class Login extends Component {
      password: '',
      redirectToReferrer: false,
      
-     msg:null
+     msg:null,
+     msg1:null
     };
 
     this.login = this.login.bind(this);
@@ -34,12 +35,15 @@ class Login extends Component {
       PostData('login',this.state).then((result) => {
        let responseJson = result;
        console.log(result)
-       if(responseJson.status){        
+       if(responseJson.status===1){        
          sessionStorage.setItem('userData',JSON.stringify(responseJson));
          this.setState({redirectToReferrer: true});
        }
-       else {
+       else if(responseJson.status===0){
          this.setState({msg:'Invalid Username or Password'})
+       }
+       else if(responseJson.status===-1){
+         this.setState({msg1:'verify email'})
        }
        
       });
@@ -70,6 +74,7 @@ class Login extends Component {
         <div className="medium-5 columns left">
         <h4>Login</h4>
         {this.state.msg?<Alert color="danger">{this.state.msg}</Alert> : null}
+        {this.state.msg1?<Alert color="danger">{this.state.msg1}</Alert> : null}
 
 
         <label>Username</label>

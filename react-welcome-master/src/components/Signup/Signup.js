@@ -20,7 +20,8 @@ class Signup extends Component {
      date_of_birth:'',
      redirectToReferrer: false,
      phone_error:null,
-     aadhar_error:null
+     aadhar_error:null,
+     username_error:null
     };
 
     this.signup = this.signup.bind(this);
@@ -33,11 +34,19 @@ class Signup extends Component {
     if(this.state.username && this.state.password && this.state.email && this.state.name && this.state.phone_no && this.state.aadhar_no && this.state.date_of_birth){
     PostData('signup',this.state).then((result) => {
       let responseJson = result;
+    
       if(responseJson.status){  
         //popup verify email
         // sessionStorage.setItem('userData',JSON.stringify(this.state));
         this.setState({redirectToReferrer: true});
       }
+      if (responseJson.status===0) {
+
+        
+        this.setState({username_error:'invalid User Name'})
+
+      } 
+        
       
      });
     }
@@ -52,7 +61,7 @@ class Signup extends Component {
    
    if (y.length!=10)
    {
-    console.log(y.length)
+    
      this.setState({phone_error:'invalid phone number'})
    }
    else{
@@ -68,7 +77,7 @@ class Signup extends Component {
    
    if (y.length!=12)
    {
-    console.log(y.length)
+    
      this.setState({aadhar_error:'invalid aadhar number'})
    }
    else{
@@ -102,6 +111,8 @@ class Signup extends Component {
         <label>Name</label>
         <input type="text" name="name"  placeholder="Name" onChange={this.onChange}/>
         <label>Username</label>
+        {this.state.username_error?<Alert color="danger">{this.state.username_error}</Alert> : null}
+
         <input type="text" name="username" placeholder="Username" onChange={this.onChange}/>
         <label>Password</label>
         <input type="password" name="password"  placeholder="Password" onChange={this.onChange}/>
